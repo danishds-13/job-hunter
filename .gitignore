@@ -1,0 +1,6 @@
+.env
+google_credentials.json
+google_credentials.json.json
+__pycache__/
+data/jobs.json
+data/matched_jobs.json
