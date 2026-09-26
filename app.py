@@ -30,15 +30,26 @@ HEADERS = {
 
 actor_input = {
     "urls": [
-        "https://www.linkedin.com/jobs/search/?keywords=DevOps%20Engineer&location=Bengaluru%2C%20Karnataka%2C%20India"
+        "https://www.linkedin.com/jobs/search/?keywords=DevOps%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=Cloud%20DevOps%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=AWS%20DevOps%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=Azure%20DevOps%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=Platform%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=SRE&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=Site%20Reliability%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=Cloud%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=Kubernetes%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=DevOps%20Terraform&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=DevOps%20Kubernetes&location=Hyderabad%2C%20Telangana%2C%20India",
+        "https://www.linkedin.com/jobs/search/?keywords=Cloud%20Infrastructure%20Engineer&location=Hyderabad%2C%20Telangana%2C%20India"
     ],
     "datePosted": "pastWeek",
     "companyIds": [],
     "under10Applicants": False,
     "autoConvertToAiSearch": True,
     "scrapeCompany": True,
-    "limitPerSource": 10,
-    "splitByLocation": False,
+    "limitPerSource": 25,
+    "splitByLocation": False
 }
 
 
