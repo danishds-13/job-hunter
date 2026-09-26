@@ -11,9 +11,9 @@ from telegram import send_telegram_message
 # CONFIGURATION
 # ==========================================
 
-CREDENTIALS_FILE = "C:\\Users\\DANISH\\Documents\\GitHub\\job-hunter\\google_credentials.json"
+CREDENTIALS_FILE = "google_credentials.json"
 SPREADSHEET_NAME = "DevOps Job Tracker"
-DATA_FILE = "C:\\Users\\DANISH\\Documents\\GitHub\\job-hunter\\data\\matched_jobs.json"
+DATA_FILE = "data/matched_jobs.json"
 
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
