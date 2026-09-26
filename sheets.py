@@ -65,13 +65,16 @@ print(f"Existing jobs in Google Sheets: {len(existing_job_ids)}")
 
 
 # ==========================================
-# IMPORT JOBS
+# PREPARE NEW JOBS
 # ==========================================
 
 today = datetime.now().strftime("%Y-%m-%d")
 
 new_jobs = 0
 skipped_jobs = 0
+
+new_rows = []
+new_job_details = []
 
 
 for job in jobs:
@@ -238,69 +241,138 @@ for job in jobs:
 
 
     # ======================================
-    # ADD JOB TO GOOGLE SHEETS
+    # STORE ROW FOR BATCH INSERT
     # ======================================
 
-    worksheet.append_row(row)
+    new_rows.append(row)
 
+    new_job_details.append({
+        "job_id": job_id,
+        "title": title,
+        "company": company,
+        "location": location,
+        "match_score": match_score,
+        "match_category": match_category,
+        "core_matched_text": core_matched_text,
+        "supporting_matched_text": supporting_matched_text,
+        "core_missing_text": core_missing_text,
+        "supporting_missing_text": supporting_missing_text,
+        "experience": experience,
+        "applicants": applicants,
+        "job_url": job_url,
+    })
+
+    # Add to set immediately so duplicate Job IDs
+    # inside the same matcher output are also avoided.
     existing_job_ids.add(job_id)
 
     new_jobs += 1
 
-    print(
-        f"Added: {title} | "
-        f"{company} | "
-        f"Score: {match_score}"
-    )
+
+# ==========================================
+# BATCH WRITE TO GOOGLE SHEETS
+# ==========================================
+
+if new_rows:
+
+    print()
+    print("======================================")
+    print("WRITING NEW JOBS TO GOOGLE SHEETS")
+    print("======================================")
+    print(f"Rows to add: {len(new_rows)}")
+
+    try:
+
+        worksheet.append_rows(
+            new_rows,
+            value_input_option="USER_ENTERED",
+        )
+
+        print(
+            f"Successfully added {len(new_rows)} "
+            "new jobs to Google Sheets."
+        )
+
+    except Exception as error:
+
+        print()
+        print("======================================")
+        print("GOOGLE SHEETS BATCH WRITE FAILED")
+        print("======================================")
+        print(error)
+        print("======================================")
+
+        raise
+
+else:
+
+    print()
+    print("No new jobs to add to Google Sheets.")
 
 
-    # ======================================
-    # TELEGRAM NOTIFICATION
-    # ======================================
+# ==========================================
+# TELEGRAM NOTIFICATIONS
+# ==========================================
 
-    telegram_message = f"""🚨 NEW DEVOPS JOB
+if new_rows:
 
-{title}
-{company}
+    print()
+    print("======================================")
+    print("SENDING TELEGRAM ALERTS")
+    print("======================================")
 
-📍 {location}
+    for job in new_job_details:
 
-🎯 Match: {match_score}%
-🔥 {match_category}
+        telegram_message = f"""🚨 NEW DEVOPS JOB
+
+{job["title"]}
+{job["company"]}
+
+📍 {job["location"]}
+
+🎯 Match: {job["match_score"]}%
+🔥 {job["match_category"]}
 
 Core Skills:
-✓ {core_matched_text if core_matched_text else "None"}
+✓ {job["core_matched_text"] if job["core_matched_text"] else "None"}
 
 Supporting Skills:
-✓ {supporting_matched_text if supporting_matched_text else "None"}
+✓ {job["supporting_matched_text"] if job["supporting_matched_text"] else "None"}
 
 Missing Core Skills:
-• {core_missing_text if core_missing_text else "None"}
+• {job["core_missing_text"] if job["core_missing_text"] else "None"}
 
 Missing Supporting Skills:
-• {supporting_missing_text if supporting_missing_text else "None"}
+• {job["supporting_missing_text"] if job["supporting_missing_text"] else "None"}
 
 💼 Experience:
-{experience}
+{job["experience"]}
 
 👥 Applicants:
-{applicants if applicants else "Not available"}
+{job["applicants"] if job["applicants"] else "Not available"}
 
 🔗 Apply:
-{job_url}
+{job["job_url"]}
 
 📝 Status: NEW
 """
 
 
-    # ======================================
-    # SEND TELEGRAM ALERT
-    # ======================================
+        if send_telegram_message(telegram_message):
 
-    if send_telegram_message(telegram_message):
-        print("Telegram alert sent.")
-    else:
-        print("Telegram alert failed.")
+            print(
+                f"Telegram alert sent: "
+                f"{job['title']} | "
+                f"{job['company']}"
+            )
+
+        else:
+
+            print(
+                f"Telegram alert failed: "
+                f"{job['title']} | "
+                f"{job['company']}"
+            )
 
 
 # ==========================================
